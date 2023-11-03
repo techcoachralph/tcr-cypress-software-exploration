@@ -1,0 +1,14 @@
+{
+  "name": "tcr-cypress-software-exploration",
+  "version": "1.0.0",
+  "description": "TCR Cypress Exploration using Lego website",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "@TechCoachRalph",
+  "license": "ISC",
+  "devDependencies": {
+    "cypress": "^13.3.3"
+  }
+}
