@@ -1,56 +1,53 @@
 /// <reference types="cypress" />
+import Homepage from '../../support/pom/homepage';
+import Navigation from '../../support/pom/navigation';
+import ProductListing from "../../support/pom/productListing";
+import ProductPage from "../../support/pom/productPage";
+import ShoppingCart from "../../support/pom/shoppingCart";
+import CheckoutLandingPage from "../../support/pom/checkoutLandingPage";
+
 describe('add product to cart', () => {
     beforeEach(() => {
         cy.visit("https://www.lego.com/")
     })
     it('Add lego product to cart', () => {
+        // instantiating page objects
+        const home = new Homepage();
+        const nav = new Navigation();
+        const productListing = new ProductListing()
+        const productPage = new ProductPage()
+        const shoppingCart = new ShoppingCart()
+        const checkoutLandingPage = new CheckoutLandingPage()
         // write some really really cool cypress automation code
 
         // don't get jealous selenium, you're still my first 🫶
-
-        // click on the continue button to go to lego.com
-        cy.get('button[data-test="age-gate-grown-up-cta"]').click()
-
-        // click ok to accept the cookies
-        cy.get('button[data-test="cookie-accept-all"]').click()
-
-        // click on shop to open shop menu
-        cy.get('button[data-test="menu-bar-item-button"][data-analytics-title=\'shop\']').click()
-
-        // click on age
-        cy.get('button[data-test="navigation-submenu-button"][data-analytics-title=\'age\']').click()
-
-        // click on 1.5+
-        cy.get('a[data-test="navigation-submenu-grandchildren-link"][data-analytics-title=\'1.5+\']').click()
+        cy.wait(10000)
+        home.clickContinueButtonToGoToLegoMainSite()
+        home.clickAcceptCookiesButton()
+        nav.clickShopLink()
+        nav.clickShopByAgeSubLink()
+        nav.clickAgeToShopForSubLink("1.5+")
 
         // todo we would rather choose a random product instead of the first one
-        // click on the first item image
-        cy.get('img[data-test="product-image-1"]').first().click()
+        productListing.clickRandomProductImage()
 
         // todo handle random feedback iframe if it pops up
-        // click add to bag button
-        cy.get('button[data-test="add-to-bag"]').click()
+        productPage.clickAddToCart()
 
-        // verify that pop up has text "Added to My Bag"
-        cy.get("div[data-test=\"add-to-bag-modal\"] h2")
+        productPage.getAddedToBagConfirmationModal()
             .should("have.text", "Added to My Bag")
 
-        // click view my bag
-        cy.get('a[data-test="view-my-bag"]').click()
+        productPage.getViewMyBagButtonLink().should("have.text", "View My Bag")
+        productPage.clickViewMyBagButton()
 
-        // verify my bag is loaded with one item in cart
-        cy.get('main[id="main-content"] h1')
-            .should("have.text", "My Bag(1)")
+        shoppingCart.getMyBagHeading()
+            .should("have.text", "My Bag (1)")
 
         // todo verify the name of the item in the cart
-        // cy.get('div[data-test="cart-item"] h3[data-test="product-title"] span')
+        // todo cy.get('div[data-test="cart-item"] h3[data-test="product-title"] span')
 
-        // click checkout securely
-        cy.get("div[class^='Cartstyles__OrderSummaryWrapper'] a[class^='OrderSummarystyles']").click()
-
-        //verify checkout page is loaded
-        cy.get("div[class^='LoginReminderstyles__TextWrapper']")
-            .first()
+        shoppingCart.clickCheckoutSecurelyButton()
+        checkoutLandingPage.getNewCustomerHeader()
             .should("have.text", "New Customer")
     })
 })
